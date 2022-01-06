@@ -1,58 +1,97 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div>
+    <div class="btn-box">
+      <a-button type="primary" @click="showDrawer()">新增</a-button>
+    </div>
+    <a-table :columns="columns" :data-source="data" bordered>
+      <template slot="operation" slot-scope="text, record">
+        <a-button type="link" @click="edit(record)">编辑</a-button>
+        <a-popconfirm title="确定删除该条吗？" cancelText="取消" okText="确定" @confirm="del(record)">
+          <a-button type="link">删除</a-button>
+        </a-popconfirm>
+      </template>
+    </a-table>
+    <a-drawer
+        :title="drawerTitle"
+        placement="right"
+        :closable="true"
+        :visible="visible"
+        @close="onClose"
+    >
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-drawer>
   </div>
 </template>
 
 <script>
+const columns = [
+  {
+    title: '图片',
+    dataIndex: 'name',
+    width: '25%',
+  },
+  {
+    title: '标题',
+    dataIndex: 'age',
+    width: '15%',
+    scopedSlots: { customRender: 'title' },
+  },
+  {
+    title: 'address',
+    dataIndex: 'address',
+    width: '40%',
+    scopedSlots: { customRender: 'address' },
+  },
+  {
+    title: '操作',
+    dataIndex: 'operation',
+    scopedSlots: { customRender: 'operation' },
+  },
+];
+const data = [];
+for (let i = 0; i < 100; i++) {
+  data.push({
+    key: i.toString(),
+    name: `Edrward ${i}`,
+    age: 32,
+    address: `London Park no. ${i}`,
+  });
+}
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  data(){
+    return {
+      columns,
+      data,
+      visible: false,
+      drawerTitle: "新增"
+    }
+  },
+  methods: {
+    del(item){
+      console.log(item.name)
+    },
+    edit(item){
+      this.visible = true
+      this.drawerTitle = '条目修改'
+      console.log(item.name)
+    },
+    onClose(){
+      this.visible = false
+    },
+    showDrawer(){
+      this.visible = true
+      this.drawerTitle = '条目新增'
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.btn-box{
+  margin-bottom: 24px;
 }
 </style>
