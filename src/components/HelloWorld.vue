@@ -69,7 +69,19 @@ export default {
       drawerTitle: "新增"
     }
   },
+  mounted() {
+
+  },
   methods: {
+    fetch(){
+      let data = {
+        uid: 1,
+        name: 'aaa'
+      }
+      this.$api.getAdminList(data).then((res) => {
+        console.log(res)
+      })
+    },
     del(item){
       console.log(item.name)
     },

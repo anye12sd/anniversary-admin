@@ -13,7 +13,7 @@ export default new Router({
         //     }
         // },
         {
-            path: "/views/index",
+            path: "/",
             name: "Index",
             component: Index,
             meta: {
