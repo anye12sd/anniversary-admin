@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {Message} from "ant-design-vue";
+import {message} from "ant-design-vue";
 
 axios.defaults.timeout = 10000;                        //响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';        //配置请求头
@@ -28,13 +28,13 @@ axios.interceptors.response.use((res) => {
     if (res.data.msg == "请登录" || res.data.code == 5) {
         this.$router.push({name: 'Login', path: '/Login'})
     }
-    if (!res.data.success) {
-        return Promise.resolve(res);
+    if (res.data.code == 200) {
+        return Promise.resolve(res.data);
     }
-    return res;
+    return res.data;
 }, (error) => {
     console.log('网络异常')
-    Message.error("网络异常")
+    message.error("网络异常")
     return Promise.reject(error);
 });
 
